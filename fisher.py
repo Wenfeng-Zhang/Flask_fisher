@@ -9,5 +9,6 @@ app = create_app()
 # 线程技术使用了LocalStack线程隔离技术，使用线程隔离的意义在于：使当前线程能够正确引用到他自己所创建的对象，而不是引用到其它线程所创建的对象
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', debug=app.config['DEBUG'], threaded=True)
+     # app.run(host='0.0.0.0', debug=app.config['DEBUG'], threaded=True)
+     app.run(debug=app.config['DEBUG'], threaded=True)
 

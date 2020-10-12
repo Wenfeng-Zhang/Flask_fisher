@@ -4,6 +4,9 @@ from app.models.book import db
 
 
 def create_app():
+    # static_folder设置默认的静态文件路径
+    # static_url_path 设置自己的静态文件夹path路径地址
+    # app = Flask(__name__, static_folder='view_models/statics', static_url_path='/test')
     app = Flask(__name__)
     app.config.from_object('app.secure')
     app.config.from_object('app.setting')

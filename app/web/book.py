@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
-from flask import jsonify, request
+import json
+from flask import jsonify, request, render_template
 from app.forms.book import SearchForm
+from app.view_models.book import BookViewModel, BookCollection
 from app.web import web
 from app.libs.helper import is_isbn_or_key
 from app.spider.yushu_book import YuShuBook
@@ -22,6 +24,18 @@ def test1():
     print(id(app))
     return ''
 
+@web.route('/test2')
+def test():
+    r = {
+        'name': 'test',
+        'age': 18
+    }
+    # 模板 html
+    
+    
+    return render_template('test.html', data=r)
+
+
 @web.route('/book/search/')
 def search():
     '''
@@ -41,18 +55,22 @@ def search():
 
     # 验证层
     form = SearchForm(request.args)
+    books = BookCollection()
+
     #如果通过验证则符合要求
     if form.validate():
         # 因为form里有默认值，所以要从form里取
-        q = form.q.data.strip()
+        q = form.q.data.strip().encode('utf8')
         page = form.page.data
         isbn_or_key = is_isbn_or_key(q)
+        yushu_book = YuShuBook()
+
         if isbn_or_key == 'isbn':
-            result = YuShuBook.search_by_isbn(q)
+            yushu_book.search_by_isbn(q)
         else:
-            result = YuShuBook.search_by_keyword(q, page)
-        # 将返回的dict序列化
-        # API
-        return jsonify(result)
+            yushu_book.search_by_keyword(q, page)
+
+        books.fill(yushu_book, q)
+        return json.dumps(books, default=lambda o: o.__dict__)
     else:
         return jsonify(form.errors)
