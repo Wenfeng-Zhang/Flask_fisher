@@ -10,21 +10,21 @@ from app.spider.yushu_book import YuShuBook
 # 蓝图 bluepaint 蓝本,使用蓝图注册路由
 
 # 全局app对象因为在主线程所以只有一个，但是app上下文在子线程所以可能有多个，当多个用户共享同一个信息的时候可以将信息放在app对象里
-@web.route('/test')
-def test1():
-    import app
-    from flask import request
-    from app.libs.none_local import n
-    print(n.v)
-    n.v = '2'
-    print('--------------')
-    print(getattr(request, 'v', None))
-    setattr(request, 'v', '2')
-    print('--------------')
-    print(id(app))
-    return ''
+# @web.route('/test')
+# def test1():
+#     import app
+#     from flask import request
+#     from app.libs.none_local import n
+#     print(n.v)
+#     n.v = '2'
+#     print('--------------')
+#     print(getattr(request, 'v', None))
+#     setattr(request, 'v', '2')
+#     print('--------------')
+#     print(id(app))
+#     return ''
 
-@web.route('/test2')
+@web.route('/test')
 def test():
     r = {
         'name': 'test',
@@ -34,6 +34,17 @@ def test():
     
     
     return render_template('test.html', data=r)
+
+
+@web.route('/test2')
+def test2():
+    r = {
+        'name': 'test',
+        'age': 18
+    }
+    # 模板 html
+
+    return render_template('test2.html', data=r)
 
 
 @web.route('/book/search/')

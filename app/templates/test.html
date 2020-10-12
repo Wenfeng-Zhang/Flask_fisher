@@ -7,9 +7,19 @@
 <body>
 
     zwf
-    {{data.age}}
+    {{ data.age }}
     {{ data['age'] }}
+    {% if data.age < 18 %}
+        {{ data.name }}
+    {% elif data.age == 18 %}
+        do something
+    {% else %}
+        {{ data.age }}
+    {% endif %}
 
+
+{# if #}
+{# for in #}
 {#object#}
 {# jinja2  模板语言#}
 </body>
