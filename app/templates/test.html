@@ -1,26 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-    zwf
+{% extends 'layout.html' %} {# 继承模板 #}
+{% block content %}         {# 继承模板的那一部分，这里继承layout.html里的content部分 #}
+    {{ super() }}           {# 继承模板里已有的信息需要super()函数 #}
     {{ data.age }}
     {{ data['age'] }}
     {% if data.age < 18 %}
         {{ data.name }}
     {% elif data.age == 18 %}
-        do something
+        {{ data | length() }} {#过滤器求长度#}
+        {{ data.aa | default(data.school) | default('未名') }}   {# default过滤器，只有没这个属性时才会显示，如果有这个属性但是为空也不会显示 #}
+{#        {% set message = get_flashed_messages() %}#}
+        {% with message = get_flashed_messages() %}  {# 在with里面的message只能在 endwith之前使用 #}
+        {{ message }}
+        {% endwith %}
     {% else %}
         {{ data.age }}
     {% endif %}
 
+{% endblock %}
 
 {# if #}
 {# for in #}
 {#object#}
 {# jinja2  模板语言#}
-</body>
-</html>

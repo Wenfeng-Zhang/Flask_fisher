@@ -3,6 +3,6 @@
 
 DEBUG = True
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:123456@127.0.0.1/fisher"
-
+SECRET_KEY = '1234567989786546321'
 # 这个文件不要上传到git
 
