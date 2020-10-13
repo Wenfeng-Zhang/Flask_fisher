@@ -29,6 +29,7 @@ def login():
     return render_template('auth/login.html', form=form)
 
 
+
 @web.route('/reset/password', methods=['GET', 'POST'])
 def forget_password_request():
     pass
