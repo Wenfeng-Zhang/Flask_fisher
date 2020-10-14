@@ -5,6 +5,7 @@ from app.forms.auth import RegisterForm, LoginForm
 from app.models.uesr import User, db
 from flask_login import login_user
 
+
 @web.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm(request.form)
@@ -13,7 +14,7 @@ def register():
         user.set_attrs(form.data)
         db.session.add(user)
         db.session.commit()
-        redirect(url_for('web.login'))
+        return redirect(url_for('web.login'))
     return render_template('auth/register.html', form=form)
 
 
@@ -24,6 +25,10 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=True)  # 持续性cookie，免登陆
+            next = request.args.get('next')   # 获取到url地址中next之后的
+            if not next or not next.startswith('/'):
+                next = url_for('web.index')
+            return redirect(next)
         else:
             flash(u'账号不存在或密码错误')
     return render_template('auth/login.html', form=form)

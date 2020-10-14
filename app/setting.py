@@ -3,3 +3,4 @@
 # 这个不涉及机密可以上传git
 
 PER_PAGE = 15
+BEANS_UPLOAD_ONE_BOOK = 0.5

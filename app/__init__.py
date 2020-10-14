@@ -16,6 +16,9 @@ def create_app():
     db.init_app(app)
     # cookie 的插件初始化
     login_manager.init_app(app)
+    login_manager.login_view = 'web.login'
+    login_manager.login_message = u'请先登录或注册'
+
     db.create_all(app=app)
     return app
 
