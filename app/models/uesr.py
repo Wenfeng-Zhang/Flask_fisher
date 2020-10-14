@@ -5,6 +5,8 @@ from app.models.base import db, Base
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from app.models.gift import Gift
+from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
 
@@ -42,6 +44,16 @@ class User(UserMixin, Base):
             return False
         # 不允许一个用户同时赠送多本相同的图书
         # 一个用户不可能同时成为赠送者和索要者
+
+        # 机不再赠送清单中，也不再心愿清单中才能添加
+        gifting = Gift.query.filter_by(uid=self.id, isbn=isbn,  # 表示如果这本图书还没赠送出去就不能继续赠送
+                                       launched=False).first()
+        wishing = Wish.query.filter_by(uid=self.id, isbn=isbn,
+                                       launched=False).first()
+        if not gifting and not wishing:
+            return True
+        else:
+            return False
 
 
 @login_manager.user_loader
