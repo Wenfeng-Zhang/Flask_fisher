@@ -2,8 +2,9 @@
 from flask import current_app
 from sqlalchemy.orm import relationship
 from app.models.base import db, Base
-from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, desc
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, desc, func
 
+from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
 
@@ -20,10 +21,14 @@ class Gift(Base):
     launched = Column(Boolean, default=False)   # 将其设置为一个布尔模型，如果为True则为成功，否则失败
 
     @classmethod
-    def get_wish_counts(self, isbn_list):
-        # 根据传入的一组isbn，到Gift表中检索出相应的礼物，并计算出某个礼物的Wish心愿数量
-        pass
-
+    def get_wish_counts(cls, isbn_list):
+        # 根据传入的一组isbn，到wish表中检索出相应的礼物，并计算出某个礼物的Wish心愿数量
+        count_list = db.session.query(func.count(Wish.id), Wish.isbn).filter(Wish.launched == False,
+                                                                             Wish.isbn.in_(isbn_list),
+                                                                             Wish.status == 1
+                                                                             ).group_by(Wish.isbn).all()
+        count_list = [{'count': w[0], 'isbn':w[1]} for w in count_list]
+        return count_list
 
     @classmethod
     def get_user_gifts(cls, uid):
@@ -48,8 +53,7 @@ class Gift(Base):
         # 先以isbn来进行group_by分组然后用distinct()去重，再进行时间order_by排序，用limit进行显示数量限制
         # recent_gift = Gift.query.filter_by(
         #     launched=False).group_by(
-        #     Gift.isbn).order_by(
-        #     desc(Gift.create_time)).limit(
+        #     Gift.isbn).limit(
         #     current_app.config['RECENT_BOOK_COUNT']).distinct().all()
         # recent_gift = Gift.query.with_entities(
         #     Gift.isbn).filter_by(
@@ -57,7 +61,7 @@ class Gift(Base):
         #     desc(Gift.create_time)).limit(
         #     current_app.config['RECENT_BOOK_COUNT']).distinct().all()
         # print recent_gift, 'type', type(recent_gift)
-        # # return recent_gift
+        # return recent_gift
 
         recent_gift = Gift.query.filter_by(
             launched=False).order_by(

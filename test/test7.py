@@ -13,7 +13,7 @@
 
 from contextlib import contextmanager
 from datetime import datetime
-
+from time import time
 
 class A(object):
 
@@ -31,11 +31,11 @@ def a():
 
 
 
-print(int(datetime.now().timestamp()))
+# print(int(datetime.now().timestamp()))
 
 
 
-
+print datetime.fromtimestamp(time())
 
 
 

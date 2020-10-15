@@ -9,7 +9,6 @@ from app.view_models.book import BookViewModel
 @web.route('/')
 def index():
     recent_gifts = Gift.recent()
-    print recent_gifts[0]
     books = [BookViewModel(gift.book) for gift in recent_gifts]
     return render_template('index.html', recent=books)
 
