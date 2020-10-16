@@ -3,8 +3,6 @@ from flask import current_app
 from sqlalchemy.orm import relationship
 from app.models.base import db, Base
 from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, desc, func
-
-from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
 
 
@@ -63,8 +61,28 @@ class Gift(Base):
         # print recent_gift, 'type', type(recent_gift)
         # return recent_gift
 
+        # recent_gift = Gift.query.filter_by(
+        #     launched=False).order_by(
+        #     desc(Gift.create_time)).limit(
+        #     current_app.config['RECENT_BOOK_COUNT']).distinct().all()
+        # return recent_gift
+
+        # recent_gift = Gift.query.filter_by(
+        #     launched=False).distinct(Gift.isbn).all()
+
+        # recent_gift = Gift.query.filter_by(
+        #     launched=False).distinct(Gift.isbn).all()
+
+        # 因为mysql和postgresql的group by不同，postgresql需要聚合以后再查询，所以另一种方式是先得到去重后的数据，
+        # 再用子查询得到和原表中ID相同的数据并进行排序等操作，这样就相当于省去group by的操作
         recent_gift = Gift.query.filter_by(
-            launched=False).order_by(
+            launched=False).distinct(Gift.isbn).subquery()
+
+        recent_gift = Gift.query.filter_by(
+            id=recent_gift.c.id).order_by(
             desc(Gift.create_time)).limit(
-            current_app.config['RECENT_BOOK_COUNT']).distinct().all()
+            current_app.config['RECENT_BOOK_COUNT']).all()
+
         return recent_gift
+
+from app.models.wish import Wish

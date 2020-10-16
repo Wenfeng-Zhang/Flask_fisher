@@ -5,7 +5,7 @@ from collections import namedtuple
 # myGift = namedtuple('MyGift', ['id', 'book', 'wishes_count'])
 
 
-class MyGifts(object):
+class MyWishes(object):
     def __init__(self, gifts_of_mine, wish_count_list):
         self.gifts = []
 
