@@ -2,8 +2,11 @@
 from flask import Flask
 from flask_login import LoginManager
 from app.models.book import db
+from flask_mail import Mail
 
 login_manager = LoginManager()
+mail = Mail()
+
 
 def create_app():
     # static_folder设置默认的静态文件路径
@@ -18,6 +21,9 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'web.login'
     login_manager.login_message = u'请先登录或注册'
+
+    # 注册email插件
+    mail.init_app(app)
 
     db.create_all(app=app)
     return app

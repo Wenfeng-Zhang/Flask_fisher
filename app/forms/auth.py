@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 # 验证层
 from wtforms import Form, StringField, IntegerField, PasswordField
-from wtforms.validators import Length, NumberRange, DataRequired, Email, ValidationError
+from wtforms.validators import Length, NumberRange, DataRequired, Email, ValidationError, EqualTo
 from app.models.uesr import User
 
 
@@ -33,3 +33,22 @@ class LoginForm(Form):
 
     password = PasswordField(validators=[
         DataRequired(message=u'密码不可以为空，请输入你的密码'), Length(6, 32)])
+
+
+class EmailForm(Form):
+    email = StringField(validators=[DataRequired(), Length(8, 64),
+                                    Email(message=u'电子邮件不符合规范')])
+
+
+class ResetPasswordForm(Form):
+    '''
+    密码与新密码校验
+    '''
+    password1 = PasswordField(validators=[
+        DataRequired(),
+        Length(6, 32, message=u'密码长度至少需要在6到32个字符之间'),
+        EqualTo('password2', message=u'两次输入的密码不相同')])
+    password2 = PasswordField(validators=[
+        DataRequired(), Length(6, 32)
+    ])
+

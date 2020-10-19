@@ -3,7 +3,7 @@ from book import BookViewModel
 from collections import namedtuple
 
 # myGift = namedtuple('MyGift', ['id', 'book', 'wishes_count'])
-
+# 理论上是MyGift和MyWish的基类
 
 class MyWishes(object):
     def __init__(self, gifts_of_mine, wish_count_list):

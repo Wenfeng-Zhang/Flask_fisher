@@ -26,6 +26,7 @@ class Wish(Base):
     @classmethod
     def get_gifts_counts(cls, isbn_list):
         # 根据传入的一组isbn，到wish表中检索出相应的礼物，并计算出某个礼物的Wish心愿数量
+        from app.models.gift import Gift
         count_list = db.session.query(func.count(Gift.id), Gift.isbn).filter(
             Gift.launched == False,
             Gift.isbn.in_(isbn_list),
@@ -39,5 +40,3 @@ class Wish(Base):
         wishes = Wish.query.filter_by(uid=uid, launched=False).order_by(
             desc(Wish.create_time)).all()
         return wishes
-
-from app.models.gift import Gift
