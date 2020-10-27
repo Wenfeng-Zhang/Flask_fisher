@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+from math import floor
 from flask import current_app
 from app import login_manager
 from app.libs.enums import PendingStatus
@@ -42,8 +43,8 @@ class User(UserMixin, Base):
         success_gifts_count = Gift.query.filter_by(
             uid=self.id, launched=True).count()
         success_receive_count = Drift.query.filter_by(
-            request_id=self.id, pending=PendingStatus.Success).count()
-
+            requester_id=self.id, pending=PendingStatus.Success).count()
+        return True if floor(success_receive_count / 2) <= floor(success_gifts_count) else False
 
     def check_password(self, raw):
         # 密码对比
@@ -92,6 +93,14 @@ class User(UserMixin, Base):
             user.password = new_password
         return True
 
+    @property
+    def summary(self):
+        return dict(
+            nickname=self.nickname,
+            beans=self.beans,
+            email=self.email,
+            send_receive=str(self.send_counter) + '/' + str(self.receive_counter)
+        )
 
 @login_manager.user_loader
 def get_user(uid):

@@ -4,7 +4,7 @@ from enum import Enum
 
 
 class PendingStatus(Enum):
-    Waiting = 1
-    Success = 2
-    Reject = 3
-    Redraw = 4
+    Waiting = 1     # 等待
+    Success = 2     # 成功
+    Reject = 3      # 拒绝
+    Redraw = 4      # 重置
