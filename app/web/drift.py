@@ -1,11 +1,17 @@
 # -*- coding:utf-8 -*-
+from flask import flash, redirect, url_for
 from . import web
-
-__author__ = '七月'
+from flask_login import login_required, current_user
+from app.models.gift import Gift
 
 
 @web.route('/drift/<int:gid>', methods=['GET', 'POST'])
+@login_required
 def send_drift(gid):
+    current_gift = Gift.query.get_or_404(gid)
+    if current_gift.is_yourself_gift(current_user.id):
+        flash(u'这本书是你自己的，不能向自己索要书籍哦')
+        return redirect(url_for('web.book_detail', isbn=current_gift.isbn))
     pass
 
 

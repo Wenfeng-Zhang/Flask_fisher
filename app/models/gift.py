@@ -16,7 +16,10 @@ class Gift(Base):
     # bid = Column(Integer, ForeignKey('book1.id'))
 
     isbn = Column(String(15), nullable=False)
-    launched = Column(Boolean, default=False)   # 将其设置为一个布尔模型，如果为True则为成功，否则失败
+    launched = Column(Boolean, default=False)   # 将其设置为一个布尔模型，如果为True则为成功，否则失败 此处表示礼物是否被赠送出去
+
+    def is_yourself_gift(self, uid):
+        return True if self.uid == uid else False
 
     @classmethod
     def get_wish_counts(cls, isbn_list):

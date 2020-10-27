@@ -1,11 +1,14 @@
 # -*- coding:utf-8 -*-
 from flask import current_app
 from app import login_manager
+from app.libs.enums import PendingStatus
 from app.libs.helper import is_isbn_or_key
 from app.models.base import db, Base
 from sqlalchemy import Column, Integer, String, Boolean, Float
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+
+from app.models.drift import Drift
 from app.models.gift import Gift
 from app.models.wish import Wish
 from app.spider.yushu_book import YuShuBook
@@ -32,6 +35,15 @@ class User(UserMixin, Base):
     @password.setter
     def password(self, raw):
         self._password = generate_password_hash(raw)
+
+    def can_send_drift(self):
+        if self.beans < 1:
+            return False
+        success_gifts_count = Gift.query.filter_by(
+            uid=self.id, launched=True).count()
+        success_receive_count = Drift.query.filter_by(
+            request_id=self.id, pending=PendingStatus.Success).count()
+
 
     def check_password(self, raw):
         # 密码对比
