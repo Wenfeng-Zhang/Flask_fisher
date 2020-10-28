@@ -20,6 +20,7 @@ class BookViewModel(object):
                         [self.author, self.publisher, self.price])
         return ' / '.join(intros)
 
+
 class BookCollection(object):
     def __init__(self):
         self.total = 0
