@@ -74,8 +74,6 @@ class Gift(Base):
         # recent_gift = Gift.query.filter_by(
         #     launched=False).distinct(Gift.isbn).all()
 
-        # recent_gift = Gift.query.filter_by(
-        #     launched=False).distinct(Gift.isbn).all()
 
         # 因为mysql和postgresql的group by不同，postgresql需要聚合以后再查询，所以另一种方式是先得到去重后的数据，
         # 再用子查询得到和原表中ID相同的数据并进行排序等操作，这样就相当于省去group by的操作

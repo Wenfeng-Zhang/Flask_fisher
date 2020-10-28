@@ -28,7 +28,7 @@ class Drift(Base):
     # 赠送者信息
     gifter_id = Column(Integer)
     gift_id = Column(Integer)
-    gift_nickname = Column(String(20))
+    gifter_nickname = Column(String(20))
 
     # 状态
     pending = Column('pending', SmallInteger, default=1)
